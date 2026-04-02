@@ -13,28 +13,36 @@ Generates a chart of inflation-adjusted U.S. gasoline prices from 1976 to the pr
 - Annotates the all-time peak price
 - Saves the chart as a PNG and the underlying data as a CSV
 
-## Usage
+## Scripts
 
-Run the script directly:
+### `gas_price_plot.py` — official data only
+
+Plots the historical series using official BLS gas prices (`APU000074714`) and CPI (`CPIAUCSL`) from FRED.
 
 ```bash
 python code/gas_price_plot.py
 ```
 
-Or call the functions from a notebook:
+### `gas_price_plot_provisional_march.py` — with provisional March 2026 estimate
 
-```python
-from code.gas_price_plot import fetch_data, make_plot, save_data
+Extends the chart with a provisional March 2026 data point before the official BLS release. The estimate is constructed by:
 
-df = fetch_data()
-make_plot(df)
-save_data(df)
+1. Bridging the official BLS gas series to the EIA all-grades series (`GASALLM`) using the latest overlapping month
+2. Applying the bridge ratio to the EIA March 2026 value to get a BLS-comparable nominal gas price
+3. Projecting March 2026 CPI using the Cleveland Fed nowcast (`MARCH_2026_CPI_NOWCAST_MOM`)
+
+The provisional point is plotted distinctly and labeled. Once the official BLS data is released, re-running `gas_price_plot.py` will replace it automatically.
+
+```bash
+python code/gas_price_plot_provisional_march.py
 ```
 
 ## Output
 
-- `inflation_adjusted_gas_prices_1976_2026.png` — the chart
-- `inflation_adjusted_gas_prices_1976_2026.csv` — the underlying data
+- `inflation_adjusted_gas_prices_1976_2026.png` — official data chart
+- `inflation_adjusted_gas_prices_1976_2026.csv` — official data
+- `inflation_adjusted_gas_prices_1976_2026_provisional_march.png` — chart with provisional March 2026 point
+- `inflation_adjusted_gas_prices_1976_2026_provisional_march.csv` — data including provisional point
 
 ## Dependencies
 
