@@ -114,7 +114,7 @@ def make_plot(df: pd.DataFrame, output_path: str = "inflation_adjusted_gas_price
     ax.set_ylabel("Price per gallon, constant dollars")
     ax.grid(True, alpha=0.3)
 
-    ax.set_xlim(df.index.min(), df.index.max())
+    ax.set_xlim(df.index.min(), df.index.max() + pd.DateOffset(months=6))
 
     ax.xaxis.set_major_locator(mdates.YearLocator(base=4))
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
